@@ -53,25 +53,23 @@ func readTrainingSets() {
 		numTrainPositives++
 	}
 
-	fmt.Println("Number of training positives: %d", numTrainPositives)
 
-/*
 	// Read negative training examples
-	outFilePath := "./trainNEG.txt" // TODO - pass as parameter and get from commandline arg
+	negFilePath := "./trainNEG.txt" // TODO - pass as parameter and get from commandline arg
 
-	numTrainExamples := 0
+	numTrainNegatives := 0
 
-	inFile, err := os.Open(inFilePath)
-	defer inFile.Close()
-	inScanner := bufio.NewScanner(inFile)
-		inScanner.Split(bufio.ScanLines)
+	negFile, _ := os.Open(negFilePath) // TODO- error handling
+	defer negFile.Close()
+	negScanner := bufio.NewScanner(negFile)
+		negScanner.Split(bufio.ScanLines)
 
-	for inScanner.Scan() {
+	for negScanner.Scan() {
 		// TODO - add code to add the training case to trainingExamplesPOS
-		numTrainPositives++
+		numTrainNegatives++
 	}
 
-*/
+	fmt.Printf("Num Negs: %d\n", numTrainNegatives)
 
 
 	// return the number of positives and negatives rather than using globals
