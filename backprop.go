@@ -11,7 +11,7 @@ func main() {
 	startTime := time.Now()
 
 	fmt.Printf("\n\n")
-	fmt.Printf("                           Backprop.go\n")
+	fmt.Printf("                           Backprop.go\n\n")
 
 	readTrainingSets()
 	readTestingSets()
@@ -41,7 +41,7 @@ func readTrainingSets() {
 	// Read positive training examples
 	posFilePath := "./trainPOS.txt" // TODO - pass as parameter and get from commandline arg
 
-	numTrainPositives := 0
+	numPositives := 0
 
 	posFile, _ := os.Open(posFilePath) // TODO - error handling
 	defer posFile.Close()
@@ -50,14 +50,16 @@ func readTrainingSets() {
 
 	for posScanner.Scan() {
 		// TODO - add code to add the training case to trainingExamplesPOS
-		numTrainPositives++
+		numPositives++
 	}
+
+	fmt.Printf("Num train POS: %d\n", numPositives)
 
 
 	// Read negative training examples
 	negFilePath := "./trainNEG.txt" // TODO - pass as parameter and get from commandline arg
 
-	numTrainNegatives := 0
+	numNegatives := 0
 
 	negFile, _ := os.Open(negFilePath) // TODO- error handling
 	defer negFile.Close()
@@ -65,17 +67,58 @@ func readTrainingSets() {
 		negScanner.Split(bufio.ScanLines)
 
 	for negScanner.Scan() {
-		// TODO - add code to add the training case to trainingExamplesPOS
-		numTrainNegatives++
+		// TODO - add code to add the training case to trainingExamplesNEG
+		numNegatives++
 	}
 
-	fmt.Printf("Num Negs: %d\n", numTrainNegatives)
+	fmt.Printf("Num train NEG: %d\n", numNegatives)
 
 
 	// return the number of positives and negatives rather than using globals
 }
 
 func readTestingSets() {
+
+	//TODO - Make the file reading generic and reuse the code for both positive and
+	//			negatives by passing parameters.
+
+	// Read positive testing examples
+	posFilePath := "./testPOS.txt" // TODO - pass as parameter and get from commandline arg
+
+	numPositives := 0
+
+	posFile, _ := os.Open(posFilePath) // TODO - error handling
+	defer posFile.Close()
+	posScanner := bufio.NewScanner(posFile)
+		posScanner.Split(bufio.ScanLines)
+
+	for posScanner.Scan() {
+		// TODO - add code to add the training case to trainingExamplesPOS
+		numPositives++
+	}
+
+	fmt.Printf("Num test POS: %d\n", numPositives)
+
+
+	// Read negative testing examples
+	negFilePath := "./testNEG.txt" // TODO - pass as parameter and get from commandline arg
+
+	numNegatives := 0
+
+	negFile, _ := os.Open(negFilePath) // TODO- error handling
+	defer negFile.Close()
+	negScanner := bufio.NewScanner(negFile)
+		negScanner.Split(bufio.ScanLines)
+
+	for negScanner.Scan() {
+		// TODO - add code to add the training case to trainingExamplesNEG
+		numNegatives++
+	}
+
+	fmt.Printf("Num test NEG: %d\n", numNegatives)
+
+
+	// return the number of positives and negatives rather than using globals
 }
 
 func reset() {
