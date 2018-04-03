@@ -10,6 +10,13 @@ var trainExamplesNEG[] string // TODO - eliminate this global
 var testExamplesPOS[]  string // TODO - eliminate this global
 var testExamplesNEG[]  string // TODO - eliminate this global
 
+// TODO - Can we eliminate these and use counters that are local
+//        to the read functions? We should be able to get these
+//        values from counts.
+var numTrainPositives int = 0
+var numTrainNegatives int = 0
+var numTestPositives  int = 0
+var numTestNegatives  int = 0
 
 func main() {
 
@@ -48,8 +55,6 @@ func readTrainingSets() {
 	// Read positive training examples
 	posFilePath := "./trainPOS.txt" // TODO - pass as parameter and get from commandline arg
 
-	numPositives := 0
-
 	posFile, _ := os.Open(posFilePath) // TODO - error handling
 	defer posFile.Close()
 	posScanner := bufio.NewScanner(posFile)
@@ -58,17 +63,15 @@ func readTrainingSets() {
 	for posScanner.Scan() {
 		// TODO - pass trainExamplesPOS into this function instead of global
 		trainExamplesPOS = append(trainExamplesPOS, posScanner.Text())
-		// fmt.Printf("P %4d: [%s]\n", numPositives, trainExamplesPOS[numPositives])
-		numPositives++
+		// fmt.Printf("P %4d: [%s]\n", numTrainPositives, trainExamplesPOS[numTrainPositives])
+		numTrainPositives++
 	}
 
-	fmt.Printf("Num train POS: %d\n", numPositives)
+	fmt.Printf("Num train POS: %d\n", numTrainPositives)
 
 
 	// Read negative training examples
 	negFilePath := "./trainNEG.txt" // TODO - pass as parameter and get from commandline arg
-
-	numNegatives := 0
 
 	negFile, _ := os.Open(negFilePath) // TODO- error handling
 	defer negFile.Close()
@@ -78,11 +81,11 @@ func readTrainingSets() {
 	for negScanner.Scan() {
 		// TODO - pass trainExamplesNEG into this function instead of global
 		trainExamplesNEG = append(trainExamplesNEG, negScanner.Text())
-		// fmt.Printf("N %4d: [%s]\n", numNegatives, trainExamplesNEG[numNegatives])
-		numNegatives++
+		// fmt.Printf("N %4d: [%s]\n", numTrainNegatives, trainExamplesNEG[numTrainNegatives])
+		numTrainNegatives++
 	}
 
-	fmt.Printf("Num train NEG: %d\n", numNegatives)
+	fmt.Printf("Num train NEG: %d\n", numTrainNegatives)
 
 
 	// return the number of positives and negatives rather than using globals
@@ -96,8 +99,6 @@ func readTestingSets() {
 	// Read positive testing examples
 	posFilePath := "./testPOS.txt" // TODO - pass as parameter and get from commandline arg
 
-	numPositives := 0
-
 	posFile, _ := os.Open(posFilePath) // TODO - error handling
 	defer posFile.Close()
 	posScanner := bufio.NewScanner(posFile)
@@ -106,17 +107,14 @@ func readTestingSets() {
 	for posScanner.Scan() {
 		// TODO - pass trainExamplesPOS into this function instead of global
 		testExamplesPOS = append(testExamplesPOS, posScanner.Text())
-		//fmt.Printf("P %4d: [%s]\n", numPositives, testExamplesPOS[numPositives])
-		numPositives++
+		//fmt.Printf("P %4d: [%s]\n", numTestPositives, testExamplesPOS[numTestPositives])
+		numTestPositives++
 	}
 
-	fmt.Printf("Num test POS: %d\n", numPositives)
-
+	fmt.Printf("Num test POS: %d\n", numTestPositives)
 
 	// Read negative testing examples
 	negFilePath := "./testNEG.txt" // TODO - pass as parameter and get from commandline arg
-
-	numNegatives := 0
 
 	negFile, _ := os.Open(negFilePath) // TODO- error handling
 	defer negFile.Close()
@@ -126,11 +124,11 @@ func readTestingSets() {
 	for negScanner.Scan() {
 		// TODO - pass trainExamplesNEG into this function instead of global
 		testExamplesNEG = append(testExamplesNEG, negScanner.Text())
-		//fmt.Printf("N %4d: [%s]\n", numNegatives, testExamplesNEG[numNegatives])
-		numNegatives++
+		//fmt.Printf("N %4d: [%s]\n", numTestNegatives, testExamplesNEG[numTestNegatives])
+		numTestNegatives++
 	}
 
-	fmt.Printf("Num test NEG: %d\n", numNegatives)
+	fmt.Printf("Num test NEG: %d\n", numTestNegatives)
 
 
 	// return the number of positives and negatives rather than using globals
