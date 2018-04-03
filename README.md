@@ -1,2 +1,2 @@
 # BackpropGo
-Port of the Backprop project to Golang
+Port of the Backprop project to Golang from C

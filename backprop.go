@@ -5,6 +5,12 @@ import "fmt"
 import "os"
 import "bufio"
 
+var trainExamplesPOS[] string // TODO - eliminate this global
+var trainExamplesNEG[] string // TODO - eliminate this global
+var testExamplesPOS[]  string // TODO - eliminate this global
+var testExamplesNEG[]  string // TODO - eliminate this global
+
+
 func main() {
 
 	pTime := fmt.Println
@@ -13,6 +19,8 @@ func main() {
 	fmt.Printf("\n\n")
 	fmt.Printf("                           Backprop.go\n\n")
 
+	// TODO - Would it be faster to feed records into train() and test() as we read them
+	//	      rather than reading them all in and then processing them?
 	readTrainingSets()
 	readTestingSets()
 
@@ -23,7 +31,6 @@ func main() {
 		train()
 		test()
 	}
-
 
     endTime := time.Now()
 	diffTime := endTime.Sub(startTime)
@@ -49,7 +56,9 @@ func readTrainingSets() {
 		posScanner.Split(bufio.ScanLines)
 
 	for posScanner.Scan() {
-		// TODO - add code to add the training case to trainingExamplesPOS
+		// TODO - pass trainExamplesPOS into this function instead of global
+		trainExamplesPOS = append(trainExamplesPOS, posScanner.Text())
+		// fmt.Printf("P %4d: [%s]\n", numPositives, trainExamplesPOS[numPositives])
 		numPositives++
 	}
 
@@ -67,7 +76,9 @@ func readTrainingSets() {
 		negScanner.Split(bufio.ScanLines)
 
 	for negScanner.Scan() {
-		// TODO - add code to add the training case to trainingExamplesNEG
+		// TODO - pass trainExamplesNEG into this function instead of global
+		trainExamplesNEG = append(trainExamplesNEG, negScanner.Text())
+		// fmt.Printf("N %4d: [%s]\n", numNegatives, trainExamplesNEG[numNegatives])
 		numNegatives++
 	}
 
@@ -93,7 +104,9 @@ func readTestingSets() {
 		posScanner.Split(bufio.ScanLines)
 
 	for posScanner.Scan() {
-		// TODO - add code to add the training case to trainingExamplesPOS
+		// TODO - pass trainExamplesPOS into this function instead of global
+		testExamplesPOS = append(testExamplesPOS, posScanner.Text())
+		//fmt.Printf("P %4d: [%s]\n", numPositives, testExamplesPOS[numPositives])
 		numPositives++
 	}
 
@@ -111,7 +124,9 @@ func readTestingSets() {
 		negScanner.Split(bufio.ScanLines)
 
 	for negScanner.Scan() {
-		// TODO - add code to add the training case to trainingExamplesNEG
+		// TODO - pass trainExamplesNEG into this function instead of global
+		testExamplesNEG = append(testExamplesNEG, negScanner.Text())
+		//fmt.Printf("N %4d: [%s]\n", numNegatives, testExamplesNEG[numNegatives])
 		numNegatives++
 	}
 
