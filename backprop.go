@@ -23,6 +23,8 @@ const numInputUnits   int = 40
 const numHiddenUnits  int = 10
 const numOutputUnits  int = 1
 
+var inputs[numInputUnits] int
+
 var weightsLayerOne[numInputUnits][numHiddenUnits] float64
 var weightsLayerTwo[numHiddenUnits][numOutputUnits] float64
 var weightsHiddenUnitsBias[numHiddenUnits] float64
@@ -148,7 +150,9 @@ func readTestingSets() {
 	// return the number of positives and negatives rather than using globals
 }
 
+// Reset the neural network to random values (0-1) and set random seed.
 func reset(seed int64) {
+
 	rand.Seed(seed)
 	//var r float64
 
@@ -169,10 +173,39 @@ func reset(seed int64) {
 	}
 }
 
+// Train the neural network with the training data
 func train() {
-	// TODO - START HERE
+	
+	for p := 0; p < len(trainExamplesPOS); p++ {
+		
+		loadInputs(trainExamplesPOS[p])
+
+		trainOneOutputUnitOnOneExampleForMultipleEpochs(0, 1, 1) // TODO - validate these parameters
+
+		loadInputs(trainExamplesNEG[p])
+
+		trainOneOutputUnitOnOneExampleForMultipleEpochs(0, 0, 1) // TODO - validate these parameters
+	}
 }
 
+func loadInputs(s string) {
+
+	for c := 0; c < len(s); c++ {
+		inputs[c] = (int)(s[c])
+	}
+}
+
+func trainOneOutputUnitOnOneExampleForMultipleEpochs(k int, label float64, numEpochs int) {
+	
+	for i := 0; i < numEpochs; i++ { 
+		trainOneOutputUnitOnOneExampleForOneEpoch(k, label)
+	}
+}
+
+func trainOneOutputUnitOnOneExampleForOneEpoch(k int, d float64) {
+
+	fmt.Printf("%d, %f \n", k, d)
+}
 
 func test() {
 }
