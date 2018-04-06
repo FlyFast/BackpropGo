@@ -4,6 +4,7 @@ import "time"
 import "fmt"
 import "os"
 import "bufio"
+import "math/rand"
 
 var trainExamplesPOS[] string // TODO - eliminate this global
 var trainExamplesNEG[] string // TODO - eliminate this global
@@ -18,7 +19,20 @@ var numTrainNegatives int = 0
 var numTestPositives  int = 0
 var numTestNegatives  int = 0
 
+const numInputUnits   int = 40
+const numHiddenUnits  int = 10
+const numOutputUnits  int = 1
+
+var weightsLayerOne[numInputUnits][numHiddenUnits] float64
+var weightsLayerTwo[numHiddenUnits][numOutputUnits] float64
+var weightsHiddenUnitsBias[numHiddenUnits] float64
+var weightsOutputUnitsBias[numOutputUnits] float64
+var hiddenLayerOutput[numHiddenUnits] float64
+var outputLayerOutput[numOutputUnits] float64
+
 func main() {
+
+	var randomSeed int64 = 0
 
 	pTime := fmt.Println
 	startTime := time.Now()
@@ -32,9 +46,9 @@ func main() {
 	readTestingSets()
 
 	//TODO: Make this configurable at runtime
-	for randomSeed := 102; randomSeed < 200; randomSeed += 10 {
+	for randomSeed = 102; randomSeed < 200; randomSeed += 10 {
 	
-		reset()
+		reset(randomSeed)
 		train()
 		test()
 	}
@@ -134,11 +148,31 @@ func readTestingSets() {
 	// return the number of positives and negatives rather than using globals
 }
 
-func reset() {
+func reset(seed int64) {
+	rand.Seed(seed)
+	//var r float64
+
+	for j := 0; j < numHiddenUnits; j++ {
+		for i := 0; i < numInputUnits; i++ {
+			weightsLayerOne[i][j] = rand.Float64()
+		}
+
+		for k := 0; k < numOutputUnits; k++ {
+			weightsLayerTwo[j][k] = rand.Float64()
+		}
+
+		weightsHiddenUnitsBias[j] = rand.Float64()
+	}
+
+	for k := 0; k < numOutputUnits; k++ {
+		weightsOutputUnitsBias[k] = rand.Float64()
+	}
 }
 
 func train() {
+	// TODO - START HERE
 }
+
 
 func test() {
 }
