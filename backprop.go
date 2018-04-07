@@ -24,7 +24,7 @@ const numInputUnits   int = 40
 const numHiddenUnits  int = 10
 const numOutputUnits  int = 1
 const rate            float64 = 0.25
-const numEpocs        int = 10000
+const numEpocs        int = 100
 
 var inputs[numInputUnits] int
 
@@ -82,11 +82,11 @@ func readTrainingSets() {
 	for posScanner.Scan() {
 		// TODO - pass trainExamplesPOS into this function instead of global
 		trainExamplesPOS = append(trainExamplesPOS, posScanner.Text())
-		// fmt.Printf("P %4d: [%s]\n", numTrainPositives, trainExamplesPOS[numTrainPositives])
+		//fmt.Printf("P %4d: [%s]\n", numTrainPositives, trainExamplesPOS[numTrainPositives])
 		numTrainPositives++
 	}
 
-	fmt.Printf("Num train POS: %d\n", numTrainPositives)
+	//fmt.Printf("Num train POS: %d\n", numTrainPositives)
 
 
 	// Read negative training examples
@@ -100,11 +100,11 @@ func readTrainingSets() {
 	for negScanner.Scan() {
 		// TODO - pass trainExamplesNEG into this function instead of global
 		trainExamplesNEG = append(trainExamplesNEG, negScanner.Text())
-		// fmt.Printf("N %4d: [%s]\n", numTrainNegatives, trainExamplesNEG[numTrainNegatives])
+		//fmt.Printf("N %4d: [%s]\n", numTrainNegatives, trainExamplesNEG[numTrainNegatives])
 		numTrainNegatives++
 	}
 
-	fmt.Printf("Num train NEG: %d\n", numTrainNegatives)
+	//fmt.Printf("Num train NEG: %d\n", numTrainNegatives)
 
 
 	// return the number of positives and negatives rather than using globals
@@ -130,7 +130,7 @@ func readTestingSets() {
 		numTestPositives++
 	}
 
-	fmt.Printf("Num test POS: %d\n", numTestPositives)
+	//fmt.Printf("Num test POS: %d\n", numTestPositives)
 
 	// Read negative testing examples
 	negFilePath := "./testNEG.txt" // TODO - pass as parameter and get from commandline arg
@@ -147,7 +147,7 @@ func readTestingSets() {
 		numTestNegatives++
 	}
 
-	fmt.Printf("Num test NEG: %d\n", numTestNegatives)
+	//fmt.Printf("Num test NEG: %d\n", numTestNegatives)
 
 
 	// return the number of positives and negatives rather than using globals
@@ -214,12 +214,17 @@ func trainOneOutputUnitOnOneExampleForOneEpoch(k int, d float64) {
 	var deltaJ float64
 
 	// First update the weight on the connection from output unit k's bias
-	weightsOutputUnitsBias[k] = rate * deltaK
+	weightsOutputUnitsBias[k] += rate * deltaK
 
 	// Next update the weight of the bias going into output unit k from hidden units
 	for j := 0; j < numHiddenUnits; j++ {
 		// First back prop the error from output unit k into hidden layer j.
 		// Calculate the back prop error delta
+
+
+		//fmt.Println("Output: %f   deltaK: %f   Weight:%f", hiddenLayerOutput[j], deltaK, weightsLayerTwo[j][k])
+		
+		
 		deltaJ = hiddenLayerOutput[j] * (1 - hiddenLayerOutput[j]) * (deltaK * weightsLayerTwo[j][k])
 
 		// Then update the weight of the bias going into hidden unit j.
@@ -234,6 +239,10 @@ func trainOneOutputUnitOnOneExampleForOneEpoch(k int, d float64) {
 		// Last go back and update the weight going from hidden unit j to output unit k
 		weightsLayerTwo[j][k] += rate * deltaK * hiddenLayerOutput[j]
 	}
+
+	//if deltaJ != 0 {
+	//	fmt.Printf("deltaJ: %2.5f     deltaK: %2.5f\n", deltaJ, deltaK)
+	//}
 }
 
 func runNet() { // TODO - change to parameters rather than globals
