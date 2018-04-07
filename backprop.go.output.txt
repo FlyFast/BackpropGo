@@ -1,0 +1,195 @@
+
+
+                           Backprop.go
+
+TEST POS:  100
+TEST NEG:   91
+
+
+                                RANDOM SEED:   102
+
+                      NUMBER OF INPUT UNITS:   40
+                     NUMBER OF HIDDEN UNITS:   10
+                     NUMBER OF OUTPUT UNITS:   1
+                        TRAINING ITERATIONS:   10000
+
+                      |   POSITIVES    |    NEGATIVES    |   ALL EXAMPLES   |
+                      |-----------------------------------------------------|
+    TRAINING SET      |      100%      |       100%      |      100%        |
+    TEST     SET      |      100%      |        91%      |       95%        |
+ ---------------------|----------------|-----------------|------------------|
+    OVER ALL EXAMPLES |      100%      |        95%      |       97%        |
+
+
+TEST POS:  100
+TEST NEG:   90
+
+
+                                RANDOM SEED:   112
+
+                      NUMBER OF INPUT UNITS:   40
+                     NUMBER OF HIDDEN UNITS:   10
+                     NUMBER OF OUTPUT UNITS:   1
+                        TRAINING ITERATIONS:   10000
+
+                      |   POSITIVES    |    NEGATIVES    |   ALL EXAMPLES   |
+                      |-----------------------------------------------------|
+    TRAINING SET      |      100%      |       100%      |      100%        |
+    TEST     SET      |      100%      |        90%      |       95%        |
+ ---------------------|----------------|-----------------|------------------|
+    OVER ALL EXAMPLES |      100%      |        95%      |       97%        |
+
+
+TEST POS:  100
+TEST NEG:   85
+
+
+                                RANDOM SEED:   122
+
+                      NUMBER OF INPUT UNITS:   40
+                     NUMBER OF HIDDEN UNITS:   10
+                     NUMBER OF OUTPUT UNITS:   1
+                        TRAINING ITERATIONS:   10000
+
+                      |   POSITIVES    |    NEGATIVES    |   ALL EXAMPLES   |
+                      |-----------------------------------------------------|
+    TRAINING SET      |      100%      |        98%      |       99%        |
+    TEST     SET      |      100%      |        85%      |       92%        |
+ ---------------------|----------------|-----------------|------------------|
+    OVER ALL EXAMPLES |      100%      |        91%      |       95%        |
+
+
+TEST POS:  100
+TEST NEG:   92
+
+
+                                RANDOM SEED:   132
+
+                      NUMBER OF INPUT UNITS:   40
+                     NUMBER OF HIDDEN UNITS:   10
+                     NUMBER OF OUTPUT UNITS:   1
+                        TRAINING ITERATIONS:   10000
+
+                      |   POSITIVES    |    NEGATIVES    |   ALL EXAMPLES   |
+                      |-----------------------------------------------------|
+    TRAINING SET      |      100%      |        99%      |       99%        |
+    TEST     SET      |      100%      |        92%      |       96%        |
+ ---------------------|----------------|-----------------|------------------|
+    OVER ALL EXAMPLES |      100%      |        96%      |       98%        |
+
+
+TEST POS:  100
+TEST NEG:   85
+
+
+                                RANDOM SEED:   142
+
+                      NUMBER OF INPUT UNITS:   40
+                     NUMBER OF HIDDEN UNITS:   10
+                     NUMBER OF OUTPUT UNITS:   1
+                        TRAINING ITERATIONS:   10000
+
+                      |   POSITIVES    |    NEGATIVES    |   ALL EXAMPLES   |
+                      |-----------------------------------------------------|
+    TRAINING SET      |      100%      |        99%      |       99%        |
+    TEST     SET      |      100%      |        85%      |       92%        |
+ ---------------------|----------------|-----------------|------------------|
+    OVER ALL EXAMPLES |      100%      |        92%      |       96%        |
+
+
+TEST POS:  100
+TEST NEG:   89
+
+
+                                RANDOM SEED:   152
+
+                      NUMBER OF INPUT UNITS:   40
+                     NUMBER OF HIDDEN UNITS:   10
+                     NUMBER OF OUTPUT UNITS:   1
+                        TRAINING ITERATIONS:   10000
+
+                      |   POSITIVES    |    NEGATIVES    |   ALL EXAMPLES   |
+                      |-----------------------------------------------------|
+    TRAINING SET      |      100%      |        99%      |       99%        |
+    TEST     SET      |      100%      |        89%      |       94%        |
+ ---------------------|----------------|-----------------|------------------|
+    OVER ALL EXAMPLES |      100%      |        94%      |       97%        |
+
+
+TEST POS:  100
+TEST NEG:   91
+
+
+                                RANDOM SEED:   162
+
+                      NUMBER OF INPUT UNITS:   40
+                     NUMBER OF HIDDEN UNITS:   10
+                     NUMBER OF OUTPUT UNITS:   1
+                        TRAINING ITERATIONS:   10000
+
+                      |   POSITIVES    |    NEGATIVES    |   ALL EXAMPLES   |
+                      |-----------------------------------------------------|
+    TRAINING SET      |      100%      |        99%      |       99%        |
+    TEST     SET      |      100%      |        91%      |       95%        |
+ ---------------------|----------------|-----------------|------------------|
+    OVER ALL EXAMPLES |      100%      |        95%      |       97%        |
+
+
+TEST POS:  100
+TEST NEG:   88
+
+
+                                RANDOM SEED:   172
+
+                      NUMBER OF INPUT UNITS:   40
+                     NUMBER OF HIDDEN UNITS:   10
+                     NUMBER OF OUTPUT UNITS:   1
+                        TRAINING ITERATIONS:   10000
+
+                      |   POSITIVES    |    NEGATIVES    |   ALL EXAMPLES   |
+                      |-----------------------------------------------------|
+    TRAINING SET      |      100%      |        99%      |       99%        |
+    TEST     SET      |      100%      |        88%      |       94%        |
+ ---------------------|----------------|-----------------|------------------|
+    OVER ALL EXAMPLES |      100%      |        94%      |       97%        |
+
+
+TEST POS:  100
+TEST NEG:   87
+
+
+                                RANDOM SEED:   182
+
+                      NUMBER OF INPUT UNITS:   40
+                     NUMBER OF HIDDEN UNITS:   10
+                     NUMBER OF OUTPUT UNITS:   1
+                        TRAINING ITERATIONS:   10000
+
+                      |   POSITIVES    |    NEGATIVES    |   ALL EXAMPLES   |
+                      |-----------------------------------------------------|
+    TRAINING SET      |      100%      |        99%      |       99%        |
+    TEST     SET      |      100%      |        87%      |       93%        |
+ ---------------------|----------------|-----------------|------------------|
+    OVER ALL EXAMPLES |      100%      |        93%      |       96%        |
+
+
+TEST POS:  100
+TEST NEG:   91
+
+
+                                RANDOM SEED:   192
+
+                      NUMBER OF INPUT UNITS:   40
+                     NUMBER OF HIDDEN UNITS:   10
+                     NUMBER OF OUTPUT UNITS:   1
+                        TRAINING ITERATIONS:   10000
+
+                      |   POSITIVES    |    NEGATIVES    |   ALL EXAMPLES   |
+                      |-----------------------------------------------------|
+    TRAINING SET      |      100%      |       100%      |      100%        |
+    TEST     SET      |      100%      |        91%      |       95%        |
+ ---------------------|----------------|-----------------|------------------|
+    OVER ALL EXAMPLES |      100%      |        95%      |       97%        |
+
+
+Runtime (secs): 214.393254248
