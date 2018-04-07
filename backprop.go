@@ -26,6 +26,8 @@ const numOutputUnits  int = 1
 const rate            float64 = 0.25
 const numEpocs        int = 100
 
+var randomSeed int64 = 0
+
 var inputs[numInputUnits] int
 
 var weightsLayerOne[numInputUnits][numHiddenUnits] float64
@@ -36,8 +38,6 @@ var hiddenLayerOutput[numHiddenUnits] float64
 var outputLayerOutput[numOutputUnits] float64
 
 func main() {
-
-	var randomSeed int64 = 0
 
 	pTime := fmt.Println
 	startTime := time.Now()
@@ -334,33 +334,35 @@ func test() {
 	}
 	trainNEGScorePCT = (int) ((100.0 * trainNEGScore) /  numTrainNegatives)
 
-	fmt.Printf("Train POS: %3d\n", trainPOSScorePCT)
-	fmt.Printf("Train NEG: %3d\n", trainNEGScorePCT)
+	//fmt.Printf("Train POS: %3d\n", trainPOSScorePCT)
+	//fmt.Printf("Train NEG: %3d\n", trainNEGScorePCT)
 
-	trainScore = trainPOSscore+trainNEGscore;
- 	testScore = testPOSscore+testNEGscore;
- 	POSscore = trainPOSscore+testPOSscore;
- 	NEGscore = trainNEGscore+testNEGscore;
- 	trainScorePCT = (int) ((100.0*trainScore)/(numTrainPositives+numTrainNegatives));
- 	testScorePCT = (int) ((100.0*testScore)/(numTestPositives+numTestNegatives));
- 	POSscorePCT = (int) ((100.0*POSscore)/(numTrainPositives+numTestPositives));
- 	NEGscorePCT = (int) ((100.0*NEGscore)/(numTrainNegatives+numTestNegatives));
- 	allExamplesScore = trainScore+testScore;
- 	allExamplesScorePCT = (int) ((100.0 * allExamplesScore)/(numTrainPositives+numTrainNegatives+numTestPositives+numTestNegatives));
-	printf("\n\n");
- 	printf("                                RANDOM SEED:   %ld\n\n", random_seed);
- 	printf("                      NUMBER OF INPUT UNITS:   %d\n", numInputUnits);
- 	printf("                     NUMBER OF HIDDEN UNITS:   %d\n", numHiddenUnits);
- 	printf("                     NUMBER OF OUTPUT UNITS:   %d\n", numOutputUnits);
- 	printf("                        TRAINING ITERATIONS:   %d\n", NUM_TRAINING_REPETITIONS);
- 	printf("\n");
- 	printf("                      |   POSITIVES    |    NEGATIVES    |   ALL EXAMPLES   |\n");
- 	printf("                      |-----------------------------------------------------|\n");
- 	printf("    TRAINING SET      |      %3d%%      |       %3d%%      |      %3d%%        |\n", trainPOSscorePCT, trainNEGscorePCT, trainScorePCT);
- 	printf("    TEST     SET      |      %3d%%      |       %3d%%      |      %3d%%        |\n", testPOSscorePCT, testNEGscorePCT, testScorePCT);
- 	printf(" ---------------------|----------------|-----------------|------------------|\n");
- 	printf("    OVER ALL EXAMPLES |      %3d%%      |       %3d%%      |      %3d%%        |\n", POSscorePCT, NEGscorePCT, allExamplesScorePCT);
- 	printf("\n\n");
+	trainScore := trainPOSScore + trainNEGScore
+	testScore := testPOSScore + testNEGScore
+	POSScore := trainPOSScore + testPOSScore
+	NEGScore := trainNEGScore + testNEGScore
+	trainScorePCT := (int) ((100.0 * trainScore) / (numTrainPositives + numTrainNegatives));
+	testScorePCT := (int) ((100.0 * testScore) / (numTestPositives + numTestNegatives))
+	POSScorePCT := (int) ((100.0 * POSScore) / (numTrainPositives + numTestPositives))
+	NEGScorePCT := (int) ((100.0 * NEGScore) / (numTrainNegatives + numTestNegatives))
+	allExamplesScore := trainScore + testScore
+	allExamplesScorePCT := (int) ((100.0 * allExamplesScore) / (numTrainPositives + numTrainNegatives + numTestPositives + numTestNegatives))
+
+	
+	fmt.Printf("\n\n")
+ 	fmt.Printf("                                RANDOM SEED:   %d\n\n", randomSeed)
+ 	fmt.Printf("                      NUMBER OF INPUT UNITS:   %d\n", numInputUnits)
+ 	fmt.Printf("                     NUMBER OF HIDDEN UNITS:   %d\n", numHiddenUnits)
+ 	fmt.Printf("                     NUMBER OF OUTPUT UNITS:   %d\n", numOutputUnits)
+ 	fmt.Printf("                        TRAINING ITERATIONS:   %d\n", numEpocs)
+ 	fmt.Printf("\n");
+ 	fmt.Printf("                      |   POSITIVES    |    NEGATIVES    |   ALL EXAMPLES   |\n");
+ 	fmt.Printf("                      |-----------------------------------------------------|\n");
+ 	fmt.Printf("    TRAINING SET      |      %3d%%      |       %3d%%      |      %3d%%        |\n", trainPOSScorePCT, trainNEGScorePCT, trainScorePCT)
+ 	fmt.Printf("    TEST     SET      |      %3d%%      |       %3d%%      |      %3d%%        |\n", testPOSScorePCT, testNEGScorePCT, testScorePCT)
+ 	fmt.Printf(" ---------------------|----------------|-----------------|------------------|\n")
+ 	fmt.Printf("    OVER ALL EXAMPLES |      %3d%%      |       %3d%%      |      %3d%%        |\n", POSScorePCT, NEGScorePCT, allExamplesScorePCT)
+ 	fmt.Printf("\n\n");
 }
 
 
