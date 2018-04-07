@@ -7,10 +7,10 @@ import "bufio"
 import "math/rand"
 import "math"
 
-var trainExamplesPOS []string // TODO - eliminate this global
-var trainExamplesNEG []string // TODO - eliminate this global
-var testExamplesPOS []string  // TODO - eliminate this global
-var testExamplesNEG []string  // TODO - eliminate this global
+var trainExamplesPOS []string
+var trainExamplesNEG []string
+var testExamplesPOS []string
+var testExamplesNEG []string
 
 // TODO - Can we eliminate these and use counters that are local
 //        to the read functions? We should be able to get these
@@ -45,12 +45,9 @@ func main() {
 	fmt.Printf("\n\n")
 	fmt.Printf("                           Backprop.go\n\n")
 
-	// TODO - Would it be faster to feed records into train() and test() as we read them
-	//	      rather than reading them all in and then processing them?
 	readTrainingSets()
 	readTestingSets()
 
-	//TODO: Make this configurable at runtime
 	for randomSeed = 102; randomSeed < 200; randomSeed += 10 {
 
 		reset(randomSeed)
@@ -82,11 +79,8 @@ func readTrainingSets() {
 	for posScanner.Scan() {
 		// TODO - pass trainExamplesPOS into this function instead of global
 		trainExamplesPOS = append(trainExamplesPOS, posScanner.Text())
-		//fmt.Printf("P %4d: [%s]\n", numTrainPositives, trainExamplesPOS[numTrainPositives])
 		numTrainPositives++
 	}
-
-	//fmt.Printf("Num train POS: %d\n", numTrainPositives)
 
 	// Read negative training examples
 	negFilePath := "./trainNEG.txt" // TODO - pass as parameter and get from commandline arg
@@ -99,13 +93,9 @@ func readTrainingSets() {
 	for negScanner.Scan() {
 		// TODO - pass trainExamplesNEG into this function instead of global
 		trainExamplesNEG = append(trainExamplesNEG, negScanner.Text())
-		//fmt.Printf("N %4d: [%s]\n", numTrainNegatives, trainExamplesNEG[numTrainNegatives])
 		numTrainNegatives++
 	}
 
-	//fmt.Printf("Num train NEG: %d\n", numTrainNegatives)
-
-	// return the number of positives and negatives rather than using globals
 }
 
 func readTestingSets() {
@@ -124,11 +114,8 @@ func readTestingSets() {
 	for posScanner.Scan() {
 		// TODO - pass trainExamplesPOS into this function instead of global
 		testExamplesPOS = append(testExamplesPOS, posScanner.Text())
-		// fmt.Printf("P %4d: [%s]\n", numTestPositives, testExamplesPOS[numTestPositives])
 		numTestPositives++
 	}
-
-	//fmt.Printf("Num test POS: %d\n", numTestPositives)
 
 	// Read negative testing examples
 	negFilePath := "./testNEG.txt" // TODO - pass as parameter and get from commandline arg
@@ -141,20 +128,15 @@ func readTestingSets() {
 	for negScanner.Scan() {
 		// TODO - pass trainExamplesNEG into this function instead of global
 		testExamplesNEG = append(testExamplesNEG, negScanner.Text())
-		//fmt.Printf("N %4d: [%s]\n", numTestNegatives, testExamplesNEG[numTestNegatives])
 		numTestNegatives++
 	}
 
-	//fmt.Printf("Num test NEG: %d\n", numTestNegatives)
-
-	// return the number of positives and negatives rather than using globals
 }
 
 // Reset the neural network to random values (0-1) and set random seed.
 func reset(seed int64) {
 
 	rand.Seed(seed)
-	//var r float64
 
 	for j := 0; j < numHiddenUnits; j++ {
 		for i := 0; i < numInputUnits; i++ {
@@ -176,17 +158,19 @@ func reset(seed int64) {
 // Train the neural network with the training data
 func train() {
 
+	// It would be better to remove this look and to put numEpocs into the
+	// calls below as the third parameter.
 	for num := 0; num < numEpocs; num++ {
 
 		for p := 0; p < len(trainExamplesPOS); p++ {
 
 			loadInputs(trainExamplesPOS[p])
 
-			trainOneOutputUnitOnOneExampleForMultipleEpochs(0, 1, 1) // TODO - validate these parameters
+			trainOneOutputUnitOnOneExampleForMultipleEpochs(0, 1, 1)
 
 			loadInputs(trainExamplesNEG[p])
 
-			trainOneOutputUnitOnOneExampleForMultipleEpochs(0, 0, 1) // TODO - validate these parameters
+			trainOneOutputUnitOnOneExampleForMultipleEpochs(0, 0, 1)
 		}
 	}
 }
@@ -213,11 +197,7 @@ func trainOneOutputUnitOnOneExampleForOneEpoch(k int, d float64) {
 
 	f := outputLayerOutput[k]
 
-	//fmt.Printf("outputLayerOutput[%d]: [%f]\n", k, f)
-
 	deltaK := (d - f) * f * (1 - f)
-
-	//fmt.Printf("deltaK: [%f]\n", deltaK)
 
 	var deltaJ float64
 
@@ -228,8 +208,6 @@ func trainOneOutputUnitOnOneExampleForOneEpoch(k int, d float64) {
 	for j := 0; j < numHiddenUnits; j++ {
 		// First back prop the error from output unit k into hidden layer j.
 		// Calculate the back prop error delta
-
-		//fmt.Println("Output: %f   deltaK: %f   Weight:%f", hiddenLayerOutput[j], deltaK, weightsLayerTwo[j][k])
 
 		deltaJ = hiddenLayerOutput[j] * (1 - hiddenLayerOutput[j]) * (deltaK * weightsLayerTwo[j][k])
 
@@ -245,10 +223,6 @@ func trainOneOutputUnitOnOneExampleForOneEpoch(k int, d float64) {
 		// Last go back and update the weight going from hidden unit j to output unit k
 		weightsLayerTwo[j][k] += rate * deltaK * hiddenLayerOutput[j]
 	}
-
-	//if deltaJ != 0 {
-	//	fmt.Printf("deltaJ: %2.5f     deltaK: %2.5f\n", deltaJ, deltaK)
-	//}
 }
 
 func runNet() { // TODO - change to parameters rather than globals
@@ -261,19 +235,10 @@ func runNet() { // TODO - change to parameters rather than globals
 
 		for i := 0; i < numInputUnits; i++ {
 
-			//fmt.Printf("weightsLayerOne[%d][%d]      : %f\n", i, j, weightsLayerOne[i][j])
-			//fmt.Printf("inputs[%d]                   : %f\n", i, inputs[i])
-
 			summedInput += weightsLayerOne[i][j] * (inputs[i])
 		}
 		summedInput += weightsHiddenUnitsBias[j]
 		hiddenLayerOutput[j] = sigmoid(summedInput)
-
-		//fmt.Printf("Hidden summed input: %f\n", summedInput)
-		//fmt.Printf("Sigmoid of summed  : %f\n", sigmoid(summedInput))
-		//fmt.Printf("Hidden layer output: %f\n", hiddenLayerOutput[j])
-
-		//bufio.NewReader(os.Stdin).ReadBytes('\n')
 	}
 
 	for k := 0; k < numOutputUnits; k++ {
@@ -309,8 +274,6 @@ func test() {
 	for p := 0; p < numTestPositives; p++ {
 		loadInputs(testExamplesPOS[p])
 		runNet()
-
-		// fmt.Println("Output: ", outputLayerOutput[0])
 
 		if LTU(outputLayerOutput[0]) == 1 {
 			testPOSScore++
@@ -351,9 +314,6 @@ func test() {
 	}
 	trainNEGScorePCT = (int)((100.0 * trainNEGScore) / numTrainNegatives)
 
-	//fmt.Printf("Train POS: %3d\n", trainPOSScorePCT)
-	//fmt.Printf("Train NEG: %3d\n", trainNEGScorePCT)
-
 	trainScore := trainPOSScore + trainNEGScore
 	testScore := testPOSScore + testNEGScore
 	POSScore := trainPOSScore + testPOSScore
@@ -385,7 +345,6 @@ func test() {
 func LTU(input float64) int {
 
 	if (input) > 0.5 {
-		//fmt.Println("LTU = 1")
 		return 1
 	} else {
 		return 0
