@@ -128,7 +128,7 @@ func readTestingSets() {
 		numTestPositives++
 	}
 
-	fmt.Printf("Num test POS: %d\n", numTestPositives)
+	//fmt.Printf("Num test POS: %d\n", numTestPositives)
 
 	// Read negative testing examples
 	negFilePath := "./testNEG.txt" // TODO - pass as parameter and get from commandline arg
@@ -310,7 +310,7 @@ func test() {
 		loadInputs(testExamplesPOS[p])
 		runNet()
 
-		fmt.Println("Output: ", outputLayerOutput[0])
+		// fmt.Println("Output: ", outputLayerOutput[0])
 
 		if LTU(outputLayerOutput[0]) == 1 {
 			testPOSScore++
