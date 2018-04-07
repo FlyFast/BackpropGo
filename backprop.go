@@ -5,6 +5,7 @@ import "fmt"
 import "os"
 import "bufio"
 import "math/rand"
+import "math"
 
 var trainExamplesPOS[] string // TODO - eliminate this global
 var trainExamplesNEG[] string // TODO - eliminate this global
@@ -22,6 +23,8 @@ var numTestNegatives  int = 0
 const numInputUnits   int = 40
 const numHiddenUnits  int = 10
 const numOutputUnits  int = 1
+const rate            float64 = 0.25
+const numEpocs        int = 10000
 
 var inputs[numInputUnits] int
 
@@ -48,7 +51,7 @@ func main() {
 	readTestingSets()
 
 	//TODO: Make this configurable at runtime
-	for randomSeed = 102; randomSeed < 200; randomSeed += 10 {
+	for randomSeed = 102; randomSeed < 103; randomSeed += 10 {
 	
 		reset(randomSeed)
 		train()
@@ -180,11 +183,11 @@ func train() {
 		
 		loadInputs(trainExamplesPOS[p])
 
-		trainOneOutputUnitOnOneExampleForMultipleEpochs(0, 1, 1) // TODO - validate these parameters
+		trainOneOutputUnitOnOneExampleForMultipleEpochs(0, 1, numEpocs) // TODO - validate these parameters
 
 		loadInputs(trainExamplesNEG[p])
 
-		trainOneOutputUnitOnOneExampleForMultipleEpochs(0, 0, 1) // TODO - validate these parameters
+		trainOneOutputUnitOnOneExampleForMultipleEpochs(0, 0, numEpocs) // TODO - validate these parameters
 	}
 }
 
@@ -204,8 +207,138 @@ func trainOneOutputUnitOnOneExampleForMultipleEpochs(k int, label float64, numEp
 
 func trainOneOutputUnitOnOneExampleForOneEpoch(k int, d float64) {
 
-	fmt.Printf("%d, %f \n", k, d)
+	runNet() // Run the neural net then update values 
+
+	f := outputLayerOutput[k]
+	deltaK := (d - f) * f * (1 - f)
+	var deltaJ float64
+
+	// First update the weight on the connection from output unit k's bias
+	weightsOutputUnitsBias[k] = rate * deltaK
+
+	// Next update the weight of the bias going into output unit k from hidden units
+	for j := 0; j < numHiddenUnits; j++ {
+		// First back prop the error from output unit k into hidden layer j.
+		// Calculate the back prop error delta
+		deltaJ = hiddenLayerOutput[j] * (1 - hiddenLayerOutput[j]) * (deltaK * weightsLayerTwo[j][k])
+
+		// Then update the weight of the bias going into hidden unit j.
+		weightsHiddenUnitsBias[j] += rate * deltaJ
+
+		// Then update the weights on the connections from the input units into
+		// hidden unit j
+		for i := 0; i < numInputUnits; i++ {
+			weightsLayerOne[i][j] += rate * deltaJ * (float64)(inputs[i])
+		}
+
+		// Last go back and update the weight going from hidden unit j to output unit k
+		weightsLayerTwo[j][k] += rate * deltaK * hiddenLayerOutput[j]
+	}
+}
+
+func runNet() { // TODO - change to parameters rather than globals
+
+	var summedInput float64 = 0.0
+
+	for j := 0; j < numHiddenUnits; j++ {
+	
+		summedInput = 0.0
+		
+		for i := 0; i < numInputUnits; i++ {
+		
+			summedInput += weightsLayerOne[i][j] * (float64)(inputs[i])
+		}
+		summedInput += weightsHiddenUnitsBias[j]
+		hiddenLayerOutput[j] = sigmoid(summedInput)
+	}
+ 
+	for k := 0; k < numOutputUnits; k++ {
+	
+		summedInput = 0.0
+		for j := 0; j < numHiddenUnits; j++ {
+		
+			summedInput += weightsLayerTwo[j][k] * hiddenLayerOutput[j]
+		}
+		summedInput += weightsOutputUnitsBias[k]
+		outputLayerOutput[k] = sigmoid(summedInput)
+	}
+}
+
+func sigmoid (input float64) float64 {
+
+	return 1.0/(1.0 + math.Pow(math.E, -input))
 }
 
 func test() {
+
+	var testPOSScore int = 0
+	var testNEGScore int = 0
+	var trainPOSScore int = 0
+	var trainNEGScore int = 0
+
+	var testPOSScorePCT int = 0
+	var testNEGScorePCT int = 0
+	var trainPOSScorePCT int = 0
+	var trainNEGScorePCT int = 0
+
+
+	testPOSScore = 0
+	for p := 0; p < numTestPositives; p++ {
+		loadInputs(testExamplesPOS[p])
+		runNet()
+		if LTU(outputLayerOutput[0]) == 1 {
+			testPOSScore++
+		}
+	}
+	testPOSScorePCT = (int) ((100.0 * testPOSScore) / numTestPositives)
+
+	testNEGScore = 0
+	for p := 0; p < numTestNegatives; p++ {
+		loadInputs(testExamplesNEG[p])
+		runNet()
+		if LTU(outputLayerOutput[0]) == 0 {
+			testNEGScore++
+		}
+	}
+	testNEGScorePCT = (int) ((100.0 * testNEGScore) / numTestNegatives)
+
+	fmt.Printf("TEST POS:  %3d\n", testPOSScorePCT)
+	fmt.Printf("TEST NEG:  %3d\n", testNEGScorePCT)
+
+	trainPOSScore = 0
+	for p := 0; p < numTrainPositives; p++ {
+		loadInputs(trainExamplesPOS[p])
+		runNet()
+		if LTU(outputLayerOutput[0]) == 1 {
+			trainPOSScore++
+		}
+	}
+	trainPOSScorePCT = (int) ((100.0 * trainPOSScore) / numTrainPositives)
+
+	trainNEGScore = 0
+	for p := 0; p < numTrainNegatives; p++ {
+		loadInputs(trainExamplesNEG[p])
+		runNet()
+		if LTU(outputLayerOutput[0]) == 0 {
+			trainNEGScore++
+		}
+	}
+	trainNEGScorePCT = (int) ((100.0 * trainNEGScore) /  numTrainNegatives)
+
+	fmt.Printf("Train POS: %3d\n", trainPOSScorePCT)
+	fmt.Printf("Train NEG: %3d\n", trainNEGScorePCT)
+
+
+}
+
+
+
+// Linear threshold unit to determine if value is closer to 1 or zero
+func LTU (input float64) int {
+
+	if (input > 0.5) {
+		return 1
+	} else {
+		return 0
+	}
 }
