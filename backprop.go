@@ -7,35 +7,35 @@ import "bufio"
 import "math/rand"
 import "math"
 
-var trainExamplesPOS[] string // TODO - eliminate this global
-var trainExamplesNEG[] string // TODO - eliminate this global
-var testExamplesPOS[]  string // TODO - eliminate this global
-var testExamplesNEG[]  string // TODO - eliminate this global
+var trainExamplesPOS []string // TODO - eliminate this global
+var trainExamplesNEG []string // TODO - eliminate this global
+var testExamplesPOS []string  // TODO - eliminate this global
+var testExamplesNEG []string  // TODO - eliminate this global
 
 // TODO - Can we eliminate these and use counters that are local
 //        to the read functions? We should be able to get these
 //        values from counts.
 var numTrainPositives int = 0
 var numTrainNegatives int = 0
-var numTestPositives  int = 0
-var numTestNegatives  int = 0
+var numTestPositives int = 0
+var numTestNegatives int = 0
 
-const numInputUnits   int = 40
-const numHiddenUnits  int = 10
-const numOutputUnits  int = 1
-const rate            float64 = 0.25
-const numEpocs        int = 10000	
+const numInputUnits int = 40
+const numHiddenUnits int = 10
+const numOutputUnits int = 1
+const rate float64 = 0.25
+const numEpocs int = 10000
 
 var randomSeed int64 = 0
 
-var inputs[numInputUnits] int
+var inputs [numInputUnits]float64
 
-var weightsLayerOne[numInputUnits][numHiddenUnits] float64
-var weightsLayerTwo[numHiddenUnits][numOutputUnits] float64
-var weightsHiddenUnitsBias[numHiddenUnits] float64
-var weightsOutputUnitsBias[numOutputUnits] float64
-var hiddenLayerOutput[numHiddenUnits] float64
-var outputLayerOutput[numOutputUnits] float64
+var weightsLayerOne [numInputUnits][numHiddenUnits]float64
+var weightsLayerTwo [numHiddenUnits][numOutputUnits]float64
+var weightsHiddenUnitsBias [numHiddenUnits]float64
+var weightsOutputUnitsBias [numOutputUnits]float64
+var hiddenLayerOutput [numHiddenUnits]float64
+var outputLayerOutput [numOutputUnits]float64
 
 func main() {
 
@@ -52,13 +52,13 @@ func main() {
 
 	//TODO: Make this configurable at runtime
 	for randomSeed = 102; randomSeed < 200; randomSeed += 10 {
-	
+
 		reset(randomSeed)
 		train()
 		test()
 	}
 
-    endTime := time.Now()
+	endTime := time.Now()
 	diffTime := endTime.Sub(startTime)
 	fmt.Printf("Runtime (secs): ")
 	pTime(diffTime.Seconds())
@@ -77,7 +77,7 @@ func readTrainingSets() {
 	posFile, _ := os.Open(posFilePath) // TODO - error handling
 	defer posFile.Close()
 	posScanner := bufio.NewScanner(posFile)
-		posScanner.Split(bufio.ScanLines)
+	posScanner.Split(bufio.ScanLines)
 
 	for posScanner.Scan() {
 		// TODO - pass trainExamplesPOS into this function instead of global
@@ -88,14 +88,13 @@ func readTrainingSets() {
 
 	//fmt.Printf("Num train POS: %d\n", numTrainPositives)
 
-
 	// Read negative training examples
 	negFilePath := "./trainNEG.txt" // TODO - pass as parameter and get from commandline arg
 
 	negFile, _ := os.Open(negFilePath) // TODO- error handling
 	defer negFile.Close()
 	negScanner := bufio.NewScanner(negFile)
-		negScanner.Split(bufio.ScanLines)
+	negScanner.Split(bufio.ScanLines)
 
 	for negScanner.Scan() {
 		// TODO - pass trainExamplesNEG into this function instead of global
@@ -105,7 +104,6 @@ func readTrainingSets() {
 	}
 
 	//fmt.Printf("Num train NEG: %d\n", numTrainNegatives)
-
 
 	// return the number of positives and negatives rather than using globals
 }
@@ -121,16 +119,16 @@ func readTestingSets() {
 	posFile, _ := os.Open(posFilePath) // TODO - error handling
 	defer posFile.Close()
 	posScanner := bufio.NewScanner(posFile)
-		posScanner.Split(bufio.ScanLines)
+	posScanner.Split(bufio.ScanLines)
 
 	for posScanner.Scan() {
 		// TODO - pass trainExamplesPOS into this function instead of global
 		testExamplesPOS = append(testExamplesPOS, posScanner.Text())
-		//fmt.Printf("P %4d: [%s]\n", numTestPositives, testExamplesPOS[numTestPositives])
+		// fmt.Printf("P %4d: [%s]\n", numTestPositives, testExamplesPOS[numTestPositives])
 		numTestPositives++
 	}
 
-	//fmt.Printf("Num test POS: %d\n", numTestPositives)
+	fmt.Printf("Num test POS: %d\n", numTestPositives)
 
 	// Read negative testing examples
 	negFilePath := "./testNEG.txt" // TODO - pass as parameter and get from commandline arg
@@ -138,7 +136,7 @@ func readTestingSets() {
 	negFile, _ := os.Open(negFilePath) // TODO- error handling
 	defer negFile.Close()
 	negScanner := bufio.NewScanner(negFile)
-		negScanner.Split(bufio.ScanLines)
+	negScanner.Split(bufio.ScanLines)
 
 	for negScanner.Scan() {
 		// TODO - pass trainExamplesNEG into this function instead of global
@@ -148,7 +146,6 @@ func readTestingSets() {
 	}
 
 	//fmt.Printf("Num test NEG: %d\n", numTestNegatives)
-
 
 	// return the number of positives and negatives rather than using globals
 }
@@ -181,9 +178,8 @@ func train() {
 
 	for num := 0; num < numEpocs; num++ {
 
-	
 		for p := 0; p < len(trainExamplesPOS); p++ {
-		
+
 			loadInputs(trainExamplesPOS[p])
 
 			trainOneOutputUnitOnOneExampleForMultipleEpochs(0, 1, 1) // TODO - validate these parameters
@@ -197,23 +193,23 @@ func train() {
 
 func loadInputs(s string) {
 
-	fmt.Printf("inputs: [")
+	//fmt.Printf("inputs: [")
 
 	for c := 0; c < len(s); c++ {
-		inputs[c] = (int)(s[c])
+		inputs[c] = (float64)(s[c] - 48) // convert char value to numeric 1 or 0
 	}
 }
 
 func trainOneOutputUnitOnOneExampleForMultipleEpochs(k int, label float64, numEpochs int) {
-	
-	for i := 0; i < numEpochs; i++ { 
+
+	for i := 0; i < numEpochs; i++ {
 		trainOneOutputUnitOnOneExampleForOneEpoch(k, label)
 	}
 }
 
 func trainOneOutputUnitOnOneExampleForOneEpoch(k int, d float64) {
 
-	runNet() // Run the neural net then update values 
+	runNet() // Run the neural net then update values
 
 	f := outputLayerOutput[k]
 
@@ -221,7 +217,7 @@ func trainOneOutputUnitOnOneExampleForOneEpoch(k int, d float64) {
 
 	deltaK := (d - f) * f * (1 - f)
 
-	fmt.Printf("deltaK: [%f]\n", deltaK)
+	//fmt.Printf("deltaK: [%f]\n", deltaK)
 
 	var deltaJ float64
 
@@ -233,10 +229,8 @@ func trainOneOutputUnitOnOneExampleForOneEpoch(k int, d float64) {
 		// First back prop the error from output unit k into hidden layer j.
 		// Calculate the back prop error delta
 
-
 		//fmt.Println("Output: %f   deltaK: %f   Weight:%f", hiddenLayerOutput[j], deltaK, weightsLayerTwo[j][k])
-		
-		
+
 		deltaJ = hiddenLayerOutput[j] * (1 - hiddenLayerOutput[j]) * (deltaK * weightsLayerTwo[j][k])
 
 		// Then update the weight of the bias going into hidden unit j.
@@ -262,22 +256,31 @@ func runNet() { // TODO - change to parameters rather than globals
 	var summedInput float64 = 0.0
 
 	for j := 0; j < numHiddenUnits; j++ {
-	
+
 		summedInput = 0.0
-		
+
 		for i := 0; i < numInputUnits; i++ {
-		
-			summedInput += weightsLayerOne[i][j] * (float64)(inputs[i])
+
+			//fmt.Printf("weightsLayerOne[%d][%d]      : %f\n", i, j, weightsLayerOne[i][j])
+			//fmt.Printf("inputs[%d]                   : %f\n", i, inputs[i])
+
+			summedInput += weightsLayerOne[i][j] * (inputs[i])
 		}
 		summedInput += weightsHiddenUnitsBias[j]
 		hiddenLayerOutput[j] = sigmoid(summedInput)
+
+		//fmt.Printf("Hidden summed input: %f\n", summedInput)
+		//fmt.Printf("Sigmoid of summed  : %f\n", sigmoid(summedInput))
+		//fmt.Printf("Hidden layer output: %f\n", hiddenLayerOutput[j])
+
+		//bufio.NewReader(os.Stdin).ReadBytes('\n')
 	}
- 
+
 	for k := 0; k < numOutputUnits; k++ {
-	
+
 		summedInput = 0.0
 		for j := 0; j < numHiddenUnits; j++ {
-		
+
 			summedInput += weightsLayerTwo[j][k] * hiddenLayerOutput[j]
 		}
 		summedInput += weightsOutputUnitsBias[k]
@@ -285,9 +288,9 @@ func runNet() { // TODO - change to parameters rather than globals
 	}
 }
 
-func sigmoid (input float64) float64 {
+func sigmoid(input float64) float64 {
 
-	return 1.0/(1.0 + math.Pow(math.E, -input))
+	return 1.0 / (1.0 + math.Pow(math.E, -input))
 }
 
 func test() {
@@ -302,16 +305,18 @@ func test() {
 	var trainPOSScorePCT int = 0
 	var trainNEGScorePCT int = 0
 
-
 	testPOSScore = 0
 	for p := 0; p < numTestPositives; p++ {
 		loadInputs(testExamplesPOS[p])
 		runNet()
+
+		fmt.Println("Output: ", outputLayerOutput[0])
+
 		if LTU(outputLayerOutput[0]) == 1 {
 			testPOSScore++
 		}
 	}
-	testPOSScorePCT = (int) ((100.0 * testPOSScore) / numTestPositives)
+	testPOSScorePCT = (int)((100.0 * testPOSScore) / numTestPositives)
 
 	testNEGScore = 0
 	for p := 0; p < numTestNegatives; p++ {
@@ -321,7 +326,7 @@ func test() {
 			testNEGScore++
 		}
 	}
-	testNEGScorePCT = (int) ((100.0 * testNEGScore) / numTestNegatives)
+	testNEGScorePCT = (int)((100.0 * testNEGScore) / numTestNegatives)
 
 	fmt.Printf("TEST POS:  %3d\n", testPOSScorePCT)
 	fmt.Printf("TEST NEG:  %3d\n", testNEGScorePCT)
@@ -334,7 +339,7 @@ func test() {
 			trainPOSScore++
 		}
 	}
-	trainPOSScorePCT = (int) ((100.0 * trainPOSScore) / numTrainPositives)
+	trainPOSScorePCT = (int)((100.0 * trainPOSScore) / numTrainPositives)
 
 	trainNEGScore = 0
 	for p := 0; p < numTrainNegatives; p++ {
@@ -344,7 +349,7 @@ func test() {
 			trainNEGScore++
 		}
 	}
-	trainNEGScorePCT = (int) ((100.0 * trainNEGScore) /  numTrainNegatives)
+	trainNEGScorePCT = (int)((100.0 * trainNEGScore) / numTrainNegatives)
 
 	//fmt.Printf("Train POS: %3d\n", trainPOSScorePCT)
 	//fmt.Printf("Train NEG: %3d\n", trainNEGScorePCT)
@@ -353,36 +358,34 @@ func test() {
 	testScore := testPOSScore + testNEGScore
 	POSScore := trainPOSScore + testPOSScore
 	NEGScore := trainNEGScore + testNEGScore
-	trainScorePCT := (int) ((100.0 * trainScore) / (numTrainPositives + numTrainNegatives));
-	testScorePCT := (int) ((100.0 * testScore) / (numTestPositives + numTestNegatives))
-	POSScorePCT := (int) ((100.0 * POSScore) / (numTrainPositives + numTestPositives))
-	NEGScorePCT := (int) ((100.0 * NEGScore) / (numTrainNegatives + numTestNegatives))
+	trainScorePCT := (int)((100.0 * trainScore) / (numTrainPositives + numTrainNegatives))
+	testScorePCT := (int)((100.0 * testScore) / (numTestPositives + numTestNegatives))
+	POSScorePCT := (int)((100.0 * POSScore) / (numTrainPositives + numTestPositives))
+	NEGScorePCT := (int)((100.0 * NEGScore) / (numTrainNegatives + numTestNegatives))
 	allExamplesScore := trainScore + testScore
-	allExamplesScorePCT := (int) ((100.0 * allExamplesScore) / (numTrainPositives + numTrainNegatives + numTestPositives + numTestNegatives))
+	allExamplesScorePCT := (int)((100.0 * allExamplesScore) / (numTrainPositives + numTrainNegatives + numTestPositives + numTestNegatives))
 
-	
 	fmt.Printf("\n\n")
- 	fmt.Printf("                                RANDOM SEED:   %d\n\n", randomSeed)
- 	fmt.Printf("                      NUMBER OF INPUT UNITS:   %d\n", numInputUnits)
- 	fmt.Printf("                     NUMBER OF HIDDEN UNITS:   %d\n", numHiddenUnits)
- 	fmt.Printf("                     NUMBER OF OUTPUT UNITS:   %d\n", numOutputUnits)
- 	fmt.Printf("                        TRAINING ITERATIONS:   %d\n", numEpocs)
- 	fmt.Printf("\n");
- 	fmt.Printf("                      |   POSITIVES    |    NEGATIVES    |   ALL EXAMPLES   |\n");
- 	fmt.Printf("                      |-----------------------------------------------------|\n");
- 	fmt.Printf("    TRAINING SET      |      %3d%%      |       %3d%%      |      %3d%%        |\n", trainPOSScorePCT, trainNEGScorePCT, trainScorePCT)
- 	fmt.Printf("    TEST     SET      |      %3d%%      |       %3d%%      |      %3d%%        |\n", testPOSScorePCT, testNEGScorePCT, testScorePCT)
- 	fmt.Printf(" ---------------------|----------------|-----------------|------------------|\n")
- 	fmt.Printf("    OVER ALL EXAMPLES |      %3d%%      |       %3d%%      |      %3d%%        |\n", POSScorePCT, NEGScorePCT, allExamplesScorePCT)
- 	fmt.Printf("\n\n");
+	fmt.Printf("                                RANDOM SEED:   %d\n\n", randomSeed)
+	fmt.Printf("                      NUMBER OF INPUT UNITS:   %d\n", numInputUnits)
+	fmt.Printf("                     NUMBER OF HIDDEN UNITS:   %d\n", numHiddenUnits)
+	fmt.Printf("                     NUMBER OF OUTPUT UNITS:   %d\n", numOutputUnits)
+	fmt.Printf("                        TRAINING ITERATIONS:   %d\n", numEpocs)
+	fmt.Printf("\n")
+	fmt.Printf("                      |   POSITIVES    |    NEGATIVES    |   ALL EXAMPLES   |\n")
+	fmt.Printf("                      |-----------------------------------------------------|\n")
+	fmt.Printf("    TRAINING SET      |      %3d%%      |       %3d%%      |      %3d%%        |\n", trainPOSScorePCT, trainNEGScorePCT, trainScorePCT)
+	fmt.Printf("    TEST     SET      |      %3d%%      |       %3d%%      |      %3d%%        |\n", testPOSScorePCT, testNEGScorePCT, testScorePCT)
+	fmt.Printf(" ---------------------|----------------|-----------------|------------------|\n")
+	fmt.Printf("    OVER ALL EXAMPLES |      %3d%%      |       %3d%%      |      %3d%%        |\n", POSScorePCT, NEGScorePCT, allExamplesScorePCT)
+	fmt.Printf("\n\n")
 }
 
-
-
 // Linear threshold unit to determine if value is closer to 1 or zero
-func LTU (input float64) int {
+func LTU(input float64) int {
 
-	if (input > 0.5) {
+	if (input) > 0.5 {
+		//fmt.Println("LTU = 1")
 		return 1
 	} else {
 		return 0
