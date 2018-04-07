@@ -24,7 +24,7 @@ const numInputUnits   int = 40
 const numHiddenUnits  int = 10
 const numOutputUnits  int = 1
 const rate            float64 = 0.25
-const numEpocs        int = 100
+const numEpocs        int = 10000	
 
 var randomSeed int64 = 0
 
@@ -51,7 +51,7 @@ func main() {
 	readTestingSets()
 
 	//TODO: Make this configurable at runtime
-	for randomSeed = 102; randomSeed < 103; randomSeed += 10 {
+	for randomSeed = 102; randomSeed < 200; randomSeed += 10 {
 	
 		reset(randomSeed)
 		train()
@@ -178,20 +178,26 @@ func reset(seed int64) {
 
 // Train the neural network with the training data
 func train() {
+
+	for num := 0; num < numEpocs; num++ {
+
 	
-	for p := 0; p < len(trainExamplesPOS); p++ {
+		for p := 0; p < len(trainExamplesPOS); p++ {
 		
-		loadInputs(trainExamplesPOS[p])
+			loadInputs(trainExamplesPOS[p])
 
-		trainOneOutputUnitOnOneExampleForMultipleEpochs(0, 1, numEpocs) // TODO - validate these parameters
+			trainOneOutputUnitOnOneExampleForMultipleEpochs(0, 1, 1) // TODO - validate these parameters
 
-		loadInputs(trainExamplesNEG[p])
+			loadInputs(trainExamplesNEG[p])
 
-		trainOneOutputUnitOnOneExampleForMultipleEpochs(0, 0, numEpocs) // TODO - validate these parameters
+			trainOneOutputUnitOnOneExampleForMultipleEpochs(0, 0, 1) // TODO - validate these parameters
+		}
 	}
 }
 
 func loadInputs(s string) {
+
+	fmt.Printf("inputs: [")
 
 	for c := 0; c < len(s); c++ {
 		inputs[c] = (int)(s[c])
@@ -210,7 +216,13 @@ func trainOneOutputUnitOnOneExampleForOneEpoch(k int, d float64) {
 	runNet() // Run the neural net then update values 
 
 	f := outputLayerOutput[k]
+
+	//fmt.Printf("outputLayerOutput[%d]: [%f]\n", k, f)
+
 	deltaK := (d - f) * f * (1 - f)
+
+	fmt.Printf("deltaK: [%f]\n", deltaK)
+
 	var deltaJ float64
 
 	// First update the weight on the connection from output unit k's bias
