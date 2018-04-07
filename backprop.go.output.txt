@@ -2,8 +2,6 @@
 
                            Backprop.go
 
-TEST POS:  100
-TEST NEG:   91
 
 
                                 RANDOM SEED:   102
@@ -21,8 +19,6 @@ TEST NEG:   91
     OVER ALL EXAMPLES |      100%      |        95%      |       97%        |
 
 
-TEST POS:  100
-TEST NEG:   90
 
 
                                 RANDOM SEED:   112
@@ -40,8 +36,6 @@ TEST NEG:   90
     OVER ALL EXAMPLES |      100%      |        95%      |       97%        |
 
 
-TEST POS:  100
-TEST NEG:   85
 
 
                                 RANDOM SEED:   122
@@ -59,8 +53,6 @@ TEST NEG:   85
     OVER ALL EXAMPLES |      100%      |        91%      |       95%        |
 
 
-TEST POS:  100
-TEST NEG:   92
 
 
                                 RANDOM SEED:   132
@@ -78,8 +70,6 @@ TEST NEG:   92
     OVER ALL EXAMPLES |      100%      |        96%      |       98%        |
 
 
-TEST POS:  100
-TEST NEG:   85
 
 
                                 RANDOM SEED:   142
@@ -97,8 +87,6 @@ TEST NEG:   85
     OVER ALL EXAMPLES |      100%      |        92%      |       96%        |
 
 
-TEST POS:  100
-TEST NEG:   89
 
 
                                 RANDOM SEED:   152
@@ -116,8 +104,6 @@ TEST NEG:   89
     OVER ALL EXAMPLES |      100%      |        94%      |       97%        |
 
 
-TEST POS:  100
-TEST NEG:   91
 
 
                                 RANDOM SEED:   162
@@ -135,8 +121,6 @@ TEST NEG:   91
     OVER ALL EXAMPLES |      100%      |        95%      |       97%        |
 
 
-TEST POS:  100
-TEST NEG:   88
 
 
                                 RANDOM SEED:   172
@@ -154,8 +138,6 @@ TEST NEG:   88
     OVER ALL EXAMPLES |      100%      |        94%      |       97%        |
 
 
-TEST POS:  100
-TEST NEG:   87
 
 
                                 RANDOM SEED:   182
@@ -173,8 +155,6 @@ TEST NEG:   87
     OVER ALL EXAMPLES |      100%      |        93%      |       96%        |
 
 
-TEST POS:  100
-TEST NEG:   91
 
 
                                 RANDOM SEED:   192
@@ -192,4 +172,4 @@ TEST NEG:   91
     OVER ALL EXAMPLES |      100%      |        95%      |       97%        |
 
 
-Runtime (secs): 214.393254248
+Runtime (secs): 205.031634763

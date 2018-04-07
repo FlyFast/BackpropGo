@@ -291,8 +291,8 @@ func test() {
 	}
 	testNEGScorePCT = (int)((100.0 * testNEGScore) / numTestNegatives)
 
-	fmt.Printf("TEST POS:  %3d\n", testPOSScorePCT)
-	fmt.Printf("TEST NEG:  %3d\n", testNEGScorePCT)
+	// fmt.Printf("TEST POS:  %3d\n", testPOSScorePCT)
+	// fmt.Printf("TEST NEG:  %3d\n", testNEGScorePCT)
 
 	trainPOSScore = 0
 	for p := 0; p < numTrainPositives; p++ {
